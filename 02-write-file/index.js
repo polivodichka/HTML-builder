@@ -5,24 +5,20 @@ const readline = require('readline').createInterface({
   output: process.stdout,
 });
 
-askFromConsole();
+readline.setPrompt('input> ');
+readline.prompt();
+readline.on('line', (line) =>{
+  if (line === 'exit') {  
+    readline.close();
+    process.exit(1);
+  }
+  else{
+    fs.appendFileSync(path.join(__dirname, 'text.txt'), line);
+    readline.prompt();
+  }
+});
 
-function askFromConsole(){
-  readline.setPrompt('input> ');
-  readline.prompt();
-  readline.on('line', (line) =>{
-    if (line === 'exit') {  
-      readline.close();
-      process.exit(0);
-    }
-    else{
-      fs.appendFileSync(path.join(__dirname, 'text.txt'), line);
-      readline.prompt();
-    }
-  });
-}
-
-readline.on('close', () => {
-  console.log('\nGreat! See you later!');
+process.on('exit', (code) => {  
+  console.log(`${code === 0 ? '\n' : ''}Great! See you later`);
 });
 
