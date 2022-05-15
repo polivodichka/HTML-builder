@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require('fs/promises');
 const path = require('path');
 const readline = require('readline').createInterface({
   input: process.stdin,
@@ -13,8 +13,7 @@ readline.on('line', (line) =>{
     process.exit(1);
   }
   else{
-    fs.appendFileSync(path.join(__dirname, 'text.txt'), line);
-    readline.prompt();
+    fs.appendFile(path.join(__dirname, 'text.txt'), line).then(readline.prompt());
   }
 });
 
