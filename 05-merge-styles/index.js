@@ -17,7 +17,7 @@ fsPromises.writeFile(path.join(__dirname, 'project-dist', 'bundle.css'), '').the
           //получаем содержимое
           readableStream.on('data', (text) => {
             //и записываем
-            writeableStream.write(text);
+            writeableStream.write(text + '\n');
           });
         }
       });
