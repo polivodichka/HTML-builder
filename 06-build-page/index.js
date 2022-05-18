@@ -70,16 +70,16 @@ function mergeCSS(){
 copyAssets();
 function copyAssets(){
   fsPromises.mkdir(path.join(__dirname, 'project-dist', 'assets'), { recursive: true })
-    .then(removeOldFiles(path.join('project-dist', 'assets')))
-    .then(copyFiles('assets', path.join('project-dist', 'assets')));
+    .then(async () => removeOldFiles(path.join('project-dist', 'assets')))
+    .then(async () => copyFiles('assets', path.join('project-dist', 'assets')));
 
   async function removeOldFiles(dirname){
-    fsPromises.readdir(path.join(__dirname, dirname), { withFileTypes: true })
-      .then((files) => {
-        files.forEach(file => {
-          if(file.isFile()) fsPromises.unlink(path.join(__dirname, dirname, file.name));
-          else fsPromises.rmdir(path.join(__dirname, dirname, file.name), { recursive: true, force: true });
-        });
+    await fsPromises.readdir(path.join(__dirname, dirname), { withFileTypes: true })
+      .then(async (files) => {
+        for await (const file of files){
+          if(file.isFile()) await fsPromises.unlink(path.join(__dirname, dirname, file.name));
+          else await fsPromises.rmdir(path.join(__dirname, dirname, file.name), { recursive: true, force: true });
+        }
       });
   }
   async function copyFiles(source, destination){
@@ -90,7 +90,7 @@ function copyAssets(){
             await fsPromises.copyFile(path.resolve(__dirname, source, file.name), path.resolve(__dirname, destination, file.name), 2);
           }
           else {
-            fsPromises.mkdir(path.resolve(__dirname, destination, file.name), { recursive: true });
+            await fsPromises.mkdir(path.resolve(__dirname, destination, file.name), { recursive: true });
             await copyFiles(path.resolve(__dirname, source, file.name), path.resolve(__dirname, destination, file.name));
           }
         }
