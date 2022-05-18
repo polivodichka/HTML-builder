@@ -28,4 +28,7 @@ async function copyFiles(source, destination){
       }
     });
 }
+process.on('exit', () => {
+  console.log('Successfully copied!');
+});
 

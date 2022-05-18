@@ -25,7 +25,7 @@ fsPromises.writeFile(path.join(__dirname, 'project-dist', 'bundle.css'), '').the
 });
 
 process.on('exit', () => {
-  console.log('Successful!');
+  console.log('Successfully merged!');
 });
 
 

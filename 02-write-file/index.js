@@ -18,6 +18,6 @@ readline.on('line', (line) =>{
 });
 
 process.on('exit', (code) => {  
-  console.log(`${code === 0 ? '\n' : ''}Great! See you later`);
+  console.log(`${code === 0 ? '\n' : ''}Great! See you later :)`);
 });
 

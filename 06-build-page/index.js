@@ -98,6 +98,6 @@ function copyAssets(){
   }
 }
 process.on('exit', () => {
-  console.log('Successful!');
+  console.log('Successfully!');
 });
 
