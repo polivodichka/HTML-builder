@@ -13,7 +13,7 @@ readline.on('line', (line) =>{
     process.exit(1);
   }
   else{
-    fs.appendFile(path.join(__dirname, 'text.txt'), line).then(readline.prompt());
+    fs.appendFile(path.join(__dirname, 'text.txt'), `${line}\n`).then(readline.prompt());
   }
 });
 
