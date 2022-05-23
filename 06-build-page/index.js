@@ -78,7 +78,7 @@ function copyAssets(){
       .then(async (files) => {
         for await (const file of files){
           if(file.isFile()) await fsPromises.unlink(path.join(__dirname, dirname, file.name));
-          else await fsPromises.rmdir(path.join(__dirname, dirname, file.name), { recursive: true, force: true });
+          else await fsPromises.rm(path.join(__dirname, dirname, file.name), { recursive: true, force: true });
         }
       });
   }
