@@ -49,37 +49,20 @@ function mergeCSS(){
 
   fsPromises.writeFile(path.join(__dirname, 'project-dist', 'style.css'), '').then(() => {
   // читаем файлы из styles
-    try {
-      fsPromises.readdir(path.join(__dirname, 'styles'), { withFileTypes: true })
-        .then((files) => {
-          files.forEach(file => {
-            //если файл стилей
-            if (file.isFile() && path.extname(file.name) === '.css') {
-              let readableStream = fs.createReadStream(path.join(__dirname, 'styles', file.name), 'utf8');
-              //получаем содержимое
-              readableStream.on('data', (text) => {
-                //и записываем
-                writeableStream.write(text + '\n');
-              });
-            }
-          });
+    fsPromises.readdir(path.join(__dirname, 'styles'), { withFileTypes: true })
+      .then((files) => {
+        files.forEach(file => {
+        //если файл стилей
+          if (file.isFile() && path.extname(file.name) === '.css') {
+            let readableStream = fs.createReadStream(path.join(__dirname, 'styles', file.name), 'utf8');
+            //получаем содержимое
+            readableStream.on('data', (text) => {
+            //и записываем
+              writeableStream.write(text + '\n');
+            });
+          }
         });
-    } catch {
-      fsPromises.readdir(path.join(__dirname, 'styles'), { withFileTypes: true })
-        .then((files) => {
-          files.forEach(file => {
-            //если файл стилей
-            if (file.isFile() && path.extname(file.name) === '.css') {
-              let readableStream = fs.createReadStream(path.join(__dirname, 'styles', file.name), 'utf8');
-              //получаем содержимое
-              readableStream.on('data', (text) => {
-                //и записываем
-                writeableStream.write(text + '\n');
-              });
-            }
-          });
-        });
-    }
+      });
   });
 }
 
@@ -91,52 +74,27 @@ function copyAssets(){
     .then(async () => copyFiles('assets', path.join('project-dist', 'assets')));
 
   async function removeOldFiles(dirname){
-    try {
-      await fsPromises.readdir(path.join(__dirname, dirname), { withFileTypes: true })
-        .then(async (files) => {
-          for await (const file of files){
-            if(file.isFile()) await fsPromises.unlink(path.join(__dirname, dirname, file.name));
-            else await fsPromises.rm(path.join(__dirname, dirname, file.name), { recursive: true, force: true });
-          }
-        });
-    } catch {
-      await fsPromises.readdir(path.join(__dirname, dirname), { withFileTypes: true })
-        .then(async (files) => {
-          for await (const file of files){
-            if(file.isFile()) await fsPromises.unlink(path.join(__dirname, dirname, file.name));
-            else await fsPromises.rm(path.join(__dirname, dirname, file.name), { recursive: true, force: true });
-          }
-        });
-    }
+    await fsPromises.readdir(path.join(__dirname, dirname), { withFileTypes: true })
+      .then(async (files) => {
+        for await (const file of files){
+          if(file.isFile()) await fsPromises.unlink(path.join(__dirname, dirname, file.name));
+          else await fsPromises.rm(path.join(__dirname, dirname, file.name), { recursive: true, force: true });
+        }
+      });
   }
   async function copyFiles(source, destination){
-    try {
-      fsPromises.readdir(path.resolve(__dirname, source), { withFileTypes: true })
-        .then(async (files) => {
-          for await (const file of files){
-            if(file.isFile()) {
-              await fsPromises.copyFile(path.resolve(__dirname, source, file.name), path.resolve(__dirname, destination, file.name), 2);
-            }
-            else {
-              await fsPromises.mkdir(path.resolve(__dirname, destination, file.name), { recursive: true });
-              await copyFiles(path.resolve(__dirname, source, file.name), path.resolve(__dirname, destination, file.name));
-            }
+    fsPromises.readdir(path.resolve(__dirname, source), { withFileTypes: true })
+      .then(async (files) => {
+        for await (const file of files){
+          if(file.isFile()) {
+            await fsPromises.copyFile(path.resolve(__dirname, source, file.name), path.resolve(__dirname, destination, file.name), 2);
           }
-        });
-    } catch {
-      fsPromises.readdir(path.resolve(__dirname, source), { withFileTypes: true })
-        .then(async (files) => {
-          for await (const file of files){
-            if(file.isFile()) {
-              await fsPromises.copyFile(path.resolve(__dirname, source, file.name), path.resolve(__dirname, destination, file.name), 2);
-            }
-            else {
-              await fsPromises.mkdir(path.resolve(__dirname, destination, file.name), { recursive: true });
-              await copyFiles(path.resolve(__dirname, source, file.name), path.resolve(__dirname, destination, file.name));
-            }
+          else {
+            await fsPromises.mkdir(path.resolve(__dirname, destination, file.name), { recursive: true });
+            await copyFiles(path.resolve(__dirname, source, file.name), path.resolve(__dirname, destination, file.name));
           }
-        });
-    }
+        }
+      });
   }
 }
 process.on('exit', () => {
