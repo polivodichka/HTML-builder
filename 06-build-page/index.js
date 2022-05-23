@@ -97,7 +97,13 @@ function copyAssets(){
       });
   }
 }
-process.on('exit', () => {
-  console.log('Successfully!');
+process.on('exit', (code) => {
+  if (code == 1) {
+    console.log ('ATTENTION! Please turn off the live server if you are using it and rebuild the project.');
+    console.log ('ВНИМАНИЕ! Пожалуйста, выключите live server, если вы его используете, и пересоберите проект.');
+    console.log ('And there is no need to rebuild at a very fast pace :) *** И нет необходимости пересобирать в очень быстром темпе :)');
+    console.log ('https://discord.com/channels/516715744646660106/974921759969124362/978264371908210720');
+  }
+  else console.log('Successfully!');
 });
 
